@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg custom-navbar">
+        <div class="container-fluid">
+            <div class="logo-div">
+                <img class="logo-img" src="image.png" alt="Logo">
+            </div>
+
+
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Examination Form</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admission.html">Admission Form</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#footer">About Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- WEBSITE NAME -->
+    <div class="page-title">
+        <h1>Registration</h1>
+    </div>
+
+
+    <!-- FORM SECTION -->
+    <div class="exam-main-div">
+
+
+        <div class="exam-title-div">
+            <h2>Examination Form</h2>
+        </div>
+
+
+        <form class="form-div" action="success.html" method="post">
+
+
+            <!-- GRID FIELDS -->
+            <div class="grid-form">
+                <div>
+                    <label>Form ID</label>
+                    <input type="text" required>
+
+
+                    <label>First Name</label>
+                    <input type="text" placeholder="Enter First Name" required>
+
+
+                    <label>Examinee ID</label>
+                    <input type="number" placeholder="Student ID" required>
+                </div>
+
+
+                <div>
+                    <label>Date of Examination</label>
+                    <input type="date" required>
+
+
+                    <label>Last Name</label>
+                    <input type="text" placeholder="Enter Last Name" required>
+
+
+                    <label>Phone Number</label>
+                    <input type="tel" placeholder="Enter Phone Number" required>
+                </div>
+            </div>
+
+
+            <!-- GENDER -->
+            <div class="radio-group">
+                <label>Gender:</label>
+                <div class="radio-options">
+                    <label><input type="radio" name="gender" required> Female</label>
+                    <label><input type="radio" name="gender" required> Male</label>
+                </div>
+            </div>
+
+
+            <!-- BRANCH -->
+            <div class="select-group">
+                <label>Branch:</label>
+                <select required>
+                    <option value="">Select Branch</option>
+                    <option>COMP</option>
+                    <option>ENTC</option>
+                    <option>MECH</option>
+                    <option>INSTRU</option>
+                </select>
+            </div>
+
+
+            <button type="submit">Submit</button>
+
+
+        </form>
+    </div>
+    <footer class="footer" id="footer">
+        <div class="footer-content">
+            <h5>About Us</h5>
+            <p>
+                Our institution is committed to providing quality education, nurturing talent,
+                and building strong values in students. We aim to create a supportive learning
+                environment that encourages academic excellence and personal growth.
+            </p>
+            <p class="copyright">
+                © 2026 Your College Name. All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+
+</html>
