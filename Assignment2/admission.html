@@ -48,11 +48,14 @@
             <div class="grid-form">
                 <div>
                     <label>Full Name</label>
-                    <input type="text" placeholder="Enter Full Name" required minlength="3">
+                    <input type="text" placeholder="Enter Full Name" required minlength="3" id="fname"
+                        oninput="validateName()">
+                    <span id="nameError" style="color:red;"></span>
 
 
                     <label>Mother's Name</label>
-                    <input type="text" placeholder="Enter Mother's Name" required>
+                    <input type="text" placeholder="Enter Mother's Name" required id="fname" oninput="validateName()">
+                    <span id="nameError" style="color:red;"></span>
 
 
                     <label>Date of Birth</label>
@@ -66,15 +69,19 @@
 
                 <div>
                     <label>Email</label>
-                    <input type="email" placeholder="example@gmail.com" required>
+                    <input type="email" placeholder="example@gmail.com" id="email" onblur="validateEmail()" required>
+                    <span id="emailError" style="color:red;"></span>
 
 
                     <label>Mobile Number</label>
-                    <input type="tel" pattern="[0-9]{10}" placeholder="10 digit number" required>
+                    <input type="tel" pattern="[0-9]{10}" placeholder="10 digit number" required id="phone"
+                        oninput="validatePhone('phone', 'phoneError')">
+                    <span id="phoneError" style="color:red;"></span>
 
 
                     <label>Place of Birth</label>
-                    <input type="text" required>
+                    <input type="text" required oninput="validateName('place', 'placeError')">
+                    <span id="placeError" style="color:red;"></span>
 
 
                     <label>State</label>
@@ -196,5 +203,6 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+<script src="script.js"></script>
 
 </html>
