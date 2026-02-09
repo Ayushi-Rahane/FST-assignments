@@ -59,7 +59,7 @@ function validateEmail() {
 
 function showUCNHint() {
     const selectedBranch = document.getElementById("selectBranchID").value;
-    const hint = document.getElementById("ucnHint");
+    const hint = document.getElementById("ucnid");
     if (selectedBranch === "COMP") {
         hint.textContent = "UCN starts with UCE";
     } else if (selectedBranch === "ENTC") {
