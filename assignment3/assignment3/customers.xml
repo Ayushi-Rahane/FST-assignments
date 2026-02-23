@@ -1,0 +1,16 @@
+<? xml version="1.0" encoding="UTF-8"?>
+
+<customers>
+    
+    <customer id="1">
+        <name> Rahul Roy </name>
+        <Address> Mumbai, Maharashtra </Address>
+    </customer>
+
+    <customer id="2">
+        <name> Ayushi Rahane </name>
+        <Address> Pune, Maharashtra </Address>
+    <customer>
+
+
+</customers>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<students>
+    <student id="101">
+        <name>John Doe</name>
+        <age>20</age>
+        <department>Computer Science</department>
+    </student>
+
+    <student id="102">
+        <name>Jane Smith</name>
+        <age>21</age>
+        <department>Information Technology</department>
+    </student>
+</students>
