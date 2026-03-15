@@ -1,0 +1,65 @@
+<customers>
+    <customer>
+        <id>1</id>
+        <name>Chota Bheem</name>
+        <email>bheem.laddoo@dholakpur.com</email>
+        <phone>+91 98765 43210</phone>
+        <address>Dholakpur</address>
+        <shipping_address>123 Royal Palace Road, Near Sweet Shop</shipping_address>
+        <city>Manali</city>
+        <country>India</country>
+        <zipcode>175131</zipcode>
+        <membership>Prime Member</membership>
+        <total_orders>1245</total_orders>
+        <last_order_date>2026-03-15</last_order_date>
+        <image>images/1.png</image>
+    </customer>
+
+    <customer>
+        <id>2</id>
+        <name>Rahul Gandhi</name>
+        <email>rg@congress.in</email>
+        <phone>+91 99887 76655</phone>
+        <address>10 Janpath</address>
+        <shipping_address>10 Janpath, Near Central Secretariat</shipping_address>
+        <city>Delhi</city>
+        <country>India</country>
+        <zipcode>110011</zipcode>
+        <membership>Regular Member</membership>
+        <total_orders>32</total_orders>
+        <last_order_date>2025-11-20</last_order_date>
+        <image>images/2.png</image>
+    </customer>
+
+    <customer>
+        <id>3</id>
+        <name>Narendra Modi</name>
+        <email>narendramodi@pmo.in</email>
+        <phone>+91 91234 56789</phone>
+        <address>7, Lok Kalyan Marg</address>
+        <shipping_address>7, Lok Kalyan Marg, Race Course Road</shipping_address>
+        <city>Delhi</city>
+        <country>India</country>
+        <zipcode>110011</zipcode>
+        <membership>Prime Member</membership>
+        <total_orders>400</total_orders>
+        <last_order_date>2026-03-01</last_order_date>
+        <image>images/3.png</image>
+    </customer>
+
+    <customer>
+        <id>4</id>
+        <name>Super Man</name>
+        <email>clark.kent@dailyplanet.com</email>
+        <phone>+1 555-0199</phone>
+        <address>New York</address>
+        <shipping_address>344 Clinton Street, Apartment 3D</shipping_address>
+        <city>Metropolis</city>
+        <country>USA</country>
+        <zipcode>10001</zipcode>
+        <membership>Prime Plus</membership>
+        <total_orders>18</total_orders>
+        <last_order_date>2026-02-14</last_order_date>
+        <image>images/6.png</image>
+    </customer>
+</customers>
