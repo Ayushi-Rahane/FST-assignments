@@ -28,11 +28,11 @@
       - Paste the Client ID below as CLIENT_ID
    --------------------------------------------------------------- */
 
-// YOUR Google Cloud API Key — replace the placeholder with your actual key
-const API_KEY = 'AIzaSyARVRsvck4JvLHLorJmgARQ5Sfce3JnHnM';
+// YOUR Google Cloud API Key — now loaded from config.js
+const API_KEY = CONFIG.API_KEY;
 
-// YOUR Google Cloud OAuth 2.0 Client ID — replace the placeholder with your actual client ID
-const CLIENT_ID = '595508879706-7s5t1obpecdb770l0cbac8quhll38gpa.apps.googleusercontent.com';
+// YOUR Google Cloud OAuth 2.0 Client ID — now loaded from config.js
+const CLIENT_ID = CONFIG.CLIENT_ID;
 
 /* ---------------------------------------------------------------
    SCOPES — What permissions we are asking from the user
@@ -98,7 +98,7 @@ function initGapiClient() {
       // If initialization succeeds, set gapiLoaded to true
       gapiLoaded = true;
       // Log a message to the browser console for debugging
-      console.log('✅ GAPI client library loaded and initialized successfully.');
+      console.log('SUCCESS: GAPI client library loaded and initialized successfully.');
     });
   });
 }

@@ -20,7 +20,10 @@
   <!-- Add a dummy favicon to prevent 404 errors in the console -->
   <link rel="icon" href="data:,">
   
-  <!-- Load our custom JavaScript file FIRST so its functions are defined -->
+  <!-- Load configuration (API keys) FIRST -->
+  <script src="config.js"></script>
+  
+  <!-- Load our custom JavaScript file -->
   <script src="script.js"></script>
   
   <!-- Load Google API JS client library; calls initGapiClient() when loaded -->
@@ -39,10 +42,7 @@
       <p class="subtitle">Interact programmatically with Google Apps — Drive, Calendar, Slides, Sheets &amp; Docs — using RESTful web services.</p>
     </div>
   </header>
-
   <main class="container">
-
-
     <!-- AUTH SECTION: Google Sign-In -->
     <section class="auth-section" id="auth">
       <h2 class="section-title"><span class="dot"></span>Step 1 — Authenticate with Google</h2>
@@ -54,12 +54,10 @@
         <span id="auth-status" class="auth-status"></span>
       </div>
     </section>
-
     <!-- API EXPLORER SECTION: Interactive API cards -->
     <section class="api-section" id="explorer">
       <h2 class="section-title"><span class="dot"></span>Step 2 — Explore Google REST APIs</h2>
       <div class="api-grid">
-
         <!-- GOOGLE DRIVE CARD -->
         <div class="api-card" id="card-drive">
           <div class="api-card-header drive-header">
@@ -73,7 +71,6 @@
           </div>
           <div class="response-area" id="response-drive"></div>
         </div>
-
         <!-- GOOGLE CALENDAR CARD -->
         <div class="api-card" id="card-calendar">
           <div class="api-card-header calendar-header">
@@ -87,7 +84,6 @@
           </div>
           <div class="response-area" id="response-calendar"></div>
         </div>
-
         <!-- GOOGLE SLIDES CARD -->
         <div class="api-card" id="card-slides">
           <div class="api-card-header slides-header">
@@ -101,7 +97,6 @@
           </div>
           <div class="response-area" id="response-slides"></div>
         </div>
-
         <!-- GOOGLE SHEETS CARD -->
         <div class="api-card" id="card-sheets">
           <div class="api-card-header sheets-header">
