@@ -1,0 +1,503 @@
+/* ============================================================
+   Assignment 8A - Google REST APIs Explorer — Stylesheet
+   ============================================================
+   This CSS file styles the entire page: layout, colors, fonts,
+   cards, buttons, and animations.
+   ============================================================ */
+
+/* --- CSS CUSTOM PROPERTIES (Variables) --- */
+/* :root targets the <html> element; variables defined here are available everywhere */
+:root {
+  /* Primary brand colors used throughout the page */
+  --color-bg: #0f1117;            /* Dark background color for the whole page */
+  --color-surface: #1a1d27;       /* Slightly lighter color for cards/sections */
+  --color-surface-2: #242836;     /* Even lighter shade for nested elements */
+  --color-border: #2e3345;        /* Border color for cards and dividers */
+  --color-text: #e4e6ef;          /* Main text color (light grey on dark bg) */
+  --color-text-dim: #8b8fa7;      /* Dimmed/secondary text color */
+  --color-accent: #6c63ff;        /* Purple accent for buttons and highlights */
+  --color-accent-glow: rgba(108, 99, 255, 0.3); /* Glowing version of accent */
+  --color-green: #34d399;         /* Green used for GET method badges */
+  --color-blue: #60a5fa;          /* Blue used for POST method badges */
+  --color-orange: #fb923c;        /* Orange used for warning/highlight elements */
+
+  /* Gradient colors for the hero header */
+  --grad-1: #6c63ff;              /* Start of gradient (purple) */
+  --grad-2: #a855f7;              /* Middle of gradient (lighter purple) */
+  --grad-3: #ec4899;              /* End of gradient (pink) */
+
+  /* Font families loaded from Google Fonts */
+  --font-body: 'Inter', sans-serif;           /* Clean sans-serif for body text */
+  --font-mono: 'JetBrains Mono', monospace;   /* Monospace font for code snippets */
+
+  /* Spacing and sizing */
+  --radius: 12px;       /* Border radius for rounded corners on cards */
+  --radius-sm: 8px;     /* Smaller radius for badges and buttons */
+  --max-width: 1100px;  /* Maximum width of the content container */
+}
+
+/* --- GLOBAL RESET --- */
+/* Remove default browser margins, padding, and use border-box sizing */
+*,
+*::before,
+*::after {
+  margin: 0;             /* Remove default margins from all elements */
+  padding: 0;            /* Remove default padding from all elements */
+  box-sizing: border-box; /* Include padding/border in element's total width/height */
+}
+
+/* --- BODY STYLES --- */
+/* Style the <body> element (the entire visible page) */
+body {
+  font-family: var(--font-body);   /* Use the Inter font for all text */
+  background: var(--color-bg);     /* Set the dark background color */
+  color: var(--color-text);        /* Set the light text color */
+  line-height: 1.7;                /* Add spacing between lines for readability */
+  -webkit-font-smoothing: antialiased; /* Makes fonts look smoother on Mac */
+}
+
+/* --- HERO / HEADER SECTION --- */
+/* The top banner with the page title and gradient background */
+.hero {
+  position: relative;        /* Allows child elements to be positioned relative to this */
+  padding: 5rem 2rem 4rem;   /* Space inside: top, sides, bottom */
+  text-align: center;        /* Center all text inside the hero */
+  overflow: hidden;          /* Hide anything that overflows the hero bounds */
+}
+
+/* Animated gradient overlay behind the hero text */
+.hero-gradient {
+  position: absolute;   /* Position it over the hero without affecting layout */
+  inset: 0;             /* Stretch to fill the entire hero area */
+  background: linear-gradient(135deg, var(--grad-1), var(--grad-2), var(--grad-3));
+  opacity: 0.12;        /* Make it very subtle (12% visible) */
+  filter: blur(60px);   /* Blur the gradient for a soft glow effect */
+  animation: pulseGlow 6s ease-in-out infinite alternate; /* Animate the glow */
+}
+
+/* Keyframe animation: makes the gradient glow pulse (grow/shrink) */
+@keyframes pulseGlow {
+  from { transform: scale(1); opacity: 0.10; }   /* Start slightly smaller and dimmer */
+  to   { transform: scale(1.15); opacity: 0.18; } /* End slightly larger and brighter */
+}
+
+/* Content inside the hero (sits above the gradient) */
+.hero-content {
+  position: relative;  /* Ensure it's above the gradient (higher z-index by default) */
+  z-index: 1;          /* Explicitly put it above the gradient layer */
+}
+
+/* The small badge/label above the title ("Assignment 8A — FST Lab") */
+.badge {
+  display: inline-block;                /* Allows padding and margin like a block */
+  padding: 0.35rem 1rem;               /* Inner spacing */
+  border-radius: 999px;                /* Fully rounded pill shape */
+  font-size: 0.8rem;                   /* Small text */
+  font-weight: 600;                    /* Semi-bold */
+  letter-spacing: 0.05em;              /* Slightly spread out letters */
+  background: rgba(108, 99, 255, 0.15); /* Semi-transparent purple background */
+  color: var(--color-accent);           /* Purple text */
+  border: 1px solid rgba(108, 99, 255, 0.3); /* Subtle purple border */
+  margin-bottom: 1.2rem;               /* Space below the badge */
+}
+
+/* Main page heading */
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem); /* Responsive font: min 2rem, max 3.2rem */
+  font-weight: 700;                     /* Bold */
+  background: linear-gradient(135deg, #fff 30%, var(--grad-2)); /* Gradient text */
+  -webkit-background-clip: text;        /* Clip gradient to text shape (Safari) */
+  background-clip: text;                /* Clip gradient to text shape */
+  -webkit-text-fill-color: transparent; /* Make text transparent to show gradient */
+  margin-bottom: 1rem;                  /* Space below heading */
+}
+
+/* Subtitle text below the heading */
+.subtitle {
+  color: var(--color-text-dim); /* Dimmed text color */
+  font-size: 1.1rem;           /* Slightly larger than normal text */
+  max-width: 640px;             /* Don't let it get too wide */
+  margin: 0 auto;              /* Center it horizontally */
+}
+
+/* --- CONTAINER --- */
+/* Wraps all main content; constrains width and centers it */
+.container {
+  max-width: var(--max-width); /* Maximum width from our CSS variable */
+  margin: 0 auto;              /* Center the container horizontally */
+  padding: 0 1.5rem 4rem;      /* Padding: none top, sides, and bottom */
+}
+
+/* --- SECTION TITLES --- */
+/* Styling for all <h2> section headings */
+.section-title {
+  font-size: 1.5rem;      /* Medium-large size */
+  font-weight: 700;        /* Bold */
+  margin-bottom: 1.5rem;   /* Space below the title */
+  display: flex;            /* Use flexbox to align the dot icon and text */
+  align-items: center;     /* Vertically center the dot and text */
+  gap: 0.6rem;              /* Space between the dot and the text */
+}
+
+/* Small colored circle before section titles */
+.dot {
+  width: 10px;                        /* Circle width */
+  height: 10px;                       /* Circle height */
+  border-radius: 50%;                 /* Make it a perfect circle */
+  background: var(--color-accent);    /* Purple color */
+  display: inline-block;              /* Allow it to sit inline with text */
+  box-shadow: 0 0 8px var(--color-accent-glow); /* Glowing effect around it */
+}
+
+/* --- THEORY CONCEPTS GRID --- */
+/* Grid layout for the 4 concept cards */
+.concepts-grid {
+  display: grid;                                /* Use CSS Grid layout */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* Responsive columns */
+  gap: 1.2rem;                                  /* Space between grid items */
+  margin-bottom: 3rem;                          /* Space below the grid */
+}
+
+/* Individual concept card styling */
+.concept-card {
+  background: var(--color-surface);  /* Dark card background */
+  border: 1px solid var(--color-border); /* Subtle border */
+  border-radius: var(--radius);      /* Rounded corners */
+  padding: 1.5rem;                   /* Inner spacing */
+  transition: transform 0.2s, box-shadow 0.2s; /* Smooth hover animation */
+}
+
+/* Hover effect: card lifts up slightly and gets a glow */
+.concept-card:hover {
+  transform: translateY(-3px);       /* Move up 3px */
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3); /* Add shadow below */
+}
+
+/* Highlighted concept card (the REST card) has a special border */
+.concept-card.highlight {
+  border-color: var(--color-accent); /* Purple border instead of grey */
+  background: linear-gradient(135deg, var(--color-surface), rgba(108,99,255,0.08));
+}
+
+/* Concept card heading */
+.concept-card h3 {
+  font-size: 1rem;         /* Normal size */
+  margin-bottom: 0.5rem;   /* Space below heading */
+  color: #fff;              /* White text */
+}
+
+/* Concept card body text */
+.concept-card p {
+  font-size: 0.88rem;            /* Slightly smaller text */
+  color: var(--color-text-dim);  /* Dimmed color */
+  line-height: 1.6;              /* Comfortable line spacing */
+}
+
+/* --- AUTH SECTION --- */
+.auth-section {
+  margin-bottom: 3rem;   /* Space below the auth section */
+}
+
+.auth-info {
+  color: var(--color-text-dim);  /* Dimmed explanatory text */
+  margin-bottom: 1.2rem;         /* Space before the button */
+  font-size: 0.95rem;
+}
+
+/* Flexbox container for button + status text */
+.auth-controls {
+  display: flex;          /* Horizontal layout */
+  align-items: center;    /* Vertically center items */
+  gap: 1rem;              /* Space between button and status */
+  flex-wrap: wrap;        /* Wrap to next line on small screens */
+}
+
+/* Status text that shows "Signed in" or errors */
+.auth-status {
+  font-size: 0.9rem;
+  color: var(--color-green); /* Green = success */
+}
+
+/* --- BUTTONS --- */
+/* Base button styles shared by all buttons */
+.btn {
+  padding: 0.7rem 1.5rem;   /* Inner spacing */
+  border: none;               /* Remove default border */
+  border-radius: var(--radius-sm); /* Rounded corners */
+  font-family: var(--font-body);   /* Use our custom font */
+  font-size: 0.9rem;         /* Button text size */
+  font-weight: 600;           /* Semi-bold text */
+  cursor: pointer;            /* Show pointer cursor on hover */
+  transition: all 0.2s;       /* Smooth transitions on all properties */
+}
+
+/* Primary button (Sign In) */
+.btn-primary {
+  background: var(--color-accent);  /* Purple background */
+  color: #fff;                       /* White text */
+  box-shadow: 0 4px 15px var(--color-accent-glow); /* Purple glow shadow */
+}
+
+/* Primary button hover: slightly brighter */
+.btn-primary:hover {
+  background: #7b73ff;  /* Lighter purple on hover */
+  transform: translateY(-1px); /* Lift slightly */
+}
+
+/* Execute button (on each API card) */
+.btn-execute {
+  background: var(--color-surface-2);  /* Dark background */
+  color: var(--color-text);             /* Light text */
+  border: 1px solid var(--color-border); /* Subtle border */
+  width: 100%;                           /* Full width of the card */
+  margin-top: 1rem;                      /* Space above the button */
+}
+
+/* Execute button hover: accent border glow */
+.btn-execute:hover {
+  border-color: var(--color-accent);    /* Purple border on hover */
+  box-shadow: 0 0 12px var(--color-accent-glow); /* Purple glow */
+  transform: translateY(-1px);           /* Slight lift */
+}
+
+/* --- API CARDS GRID --- */
+.api-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Responsive 2-column grid */
+  gap: 1.5rem;        /* Space between cards */
+  margin-bottom: 3rem;
+}
+
+/* Individual API card */
+.api-card {
+  background: var(--color-surface);    /* Dark background */
+  border: 1px solid var(--color-border); /* Subtle border */
+  border-radius: var(--radius);        /* Rounded corners */
+  overflow: hidden;                     /* Clip child elements to rounded corners */
+  transition: box-shadow 0.25s;        /* Smooth shadow transition on hover */
+}
+
+/* API card hover: add a glow effect */
+.api-card:hover {
+  box-shadow: 0 0 25px rgba(108,99,255,0.1); /* Subtle purple glow */
+}
+
+/* Card header (colored top bar with icon + title) */
+.api-card-header {
+  display: flex;       /* Horizontal layout */
+  align-items: center; /* Vertically center icon and text */
+  gap: 0.8rem;          /* Space between icon and text */
+  padding: 1.2rem 1.5rem; /* Inner spacing */
+  border-bottom: 1px solid var(--color-border); /* Line below header */
+}
+
+/* Different colored left borders for each API card header */
+.drive-header    { border-left: 4px solid #4285f4; } /* Google blue */
+.calendar-header { border-left: 4px solid #0f9d58; } /* Google green */
+.slides-header   { border-left: 4px solid #f4b400; } /* Google yellow */
+.sheets-header   { border-left: 4px solid #0f9d58; } /* Google green */
+.docs-header     { border-left: 4px solid #4285f4; } /* Google blue */
+
+/* Large emoji icon on each card */
+.api-icon {
+  font-size: 2rem; /* Make the emoji icon large */
+}
+
+/* API card title */
+.api-card-header h3 {
+  font-size: 1.1rem;  /* Slightly larger text */
+  color: #fff;         /* White */
+}
+
+/* API card subtitle description */
+.api-desc {
+  font-size: 0.82rem;           /* Small text */
+  color: var(--color-text-dim); /* Dimmed */
+}
+
+/* Card body (method badge + explanation + button) */
+.api-card-body {
+  padding: 1.2rem 1.5rem; /* Inner spacing */
+}
+
+/* HTTP method display (badge + URL) */
+.http-method {
+  display: flex;       /* Horizontal layout */
+  align-items: center; /* Center vertically */
+  gap: 0.6rem;          /* Space between badge and URL */
+  margin-bottom: 0.8rem;
+}
+
+/* Method badge (GET/POST) */
+.method-badge {
+  padding: 0.2rem 0.6rem;    /* Small padding */
+  border-radius: 4px;         /* Slightly rounded */
+  font-family: var(--font-mono); /* Monospace font */
+  font-size: 0.75rem;         /* Small text */
+  font-weight: 700;           /* Bold */
+  text-transform: uppercase;  /* ALL CAPS */
+}
+
+/* GET badge: green background */
+.method-badge.get {
+  background: rgba(52, 211, 153, 0.15); /* Semi-transparent green */
+  color: var(--color-green);             /* Green text */
+}
+
+/* POST badge: blue background */
+.method-badge.post {
+  background: rgba(96, 165, 250, 0.15); /* Semi-transparent blue */
+  color: var(--color-blue);              /* Blue text */
+}
+
+/* URL code text next to the badge */
+.http-method code {
+  font-family: var(--font-mono); /* Monospace font for URLs */
+  font-size: 0.78rem;           /* Small text */
+  color: var(--color-text-dim); /* Dimmed color */
+  word-break: break-all;        /* Break long URLs to prevent overflow */
+}
+
+/* Explanation paragraph inside the card */
+.api-explain {
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+  line-height: 1.5;
+}
+
+/* --- RESPONSE AREA --- */
+/* Area below each card where JSON responses are shown */
+.response-area {
+  border-top: 1px solid var(--color-border); /* Line above response */
+  padding: 0;          /* No padding when empty */
+  max-height: 0;       /* Collapsed by default */
+  overflow: hidden;    /* Hide content when collapsed */
+  transition: max-height 0.4s ease, padding 0.4s ease; /* Smooth expand animation */
+}
+
+/* When response area has content (class added by JS), expand it */
+.response-area.active {
+  max-height: 500px;         /* Allow up to 500px height */
+  padding: 1rem 1.5rem;      /* Show padding when expanded */
+  overflow-y: auto;          /* Add scrollbar if content overflows */
+}
+
+/* Styling for the <pre> tag inside response areas (formatted JSON) */
+.response-area pre {
+  font-family: var(--font-mono); /* Monospace for JSON */
+  font-size: 0.78rem;           /* Small text */
+  color: var(--color-green);    /* Green text like a terminal */
+  background: var(--color-bg);  /* Dark background */
+  padding: 1rem;                /* Inner spacing */
+  border-radius: var(--radius-sm); /* Rounded corners */
+  white-space: pre-wrap;        /* Wrap long lines */
+  word-break: break-word;       /* Break long words/URLs */
+  line-height: 1.5;
+}
+
+/* --- HTTP LOG SECTION --- */
+.log-section {
+  margin-bottom: 2rem;
+}
+
+.log-info {
+  color: var(--color-text-dim);
+  font-size: 0.92rem;
+  margin-bottom: 1rem;
+}
+
+/* Log container */
+.http-log {
+  background: var(--color-surface);    /* Dark background */
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  max-height: 500px;                    /* Scrollable if too long */
+  overflow-y: auto;                     /* Vertical scrollbar */
+}
+
+/* Placeholder text when no logs exist yet */
+.log-placeholder {
+  color: var(--color-text-dim);
+  font-style: italic;
+  text-align: center;
+}
+
+/* Individual log entry */
+.log-entry {
+  margin-bottom: 1.5rem;          /* Space between entries */
+  padding-bottom: 1.5rem;         /* Space before the divider */
+  border-bottom: 1px solid var(--color-border); /* Divider line */
+  animation: fadeIn 0.3s ease;     /* Fade in when added */
+}
+
+/* Remove border from the last log entry */
+.log-entry:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* Log entry title (e.g. "GET /drive/v3/files") */
+.log-entry h4 {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Timestamp shown in log entries */
+.log-time {
+  font-size: 0.75rem;
+  color: var(--color-text-dim);
+  font-weight: 400;
+}
+
+/* JSON code block inside log entries */
+.log-entry pre {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-green);
+  background: var(--color-bg);
+  padding: 0.8rem;
+  border-radius: var(--radius-sm);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Fade-in animation for new log entries */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); } /* Start invisible and above */
+  to   { opacity: 1; transform: translateY(0); }     /* End visible and in place */
+}
+
+/* --- FOOTER --- */
+.footer {
+  text-align: center;              /* Center footer text */
+  padding: 2rem;                   /* Inner spacing */
+  color: var(--color-text-dim);    /* Dimmed text */
+  font-size: 0.85rem;
+  border-top: 1px solid var(--color-border); /* Top border line */
+}
+
+/* --- SCROLLBAR STYLING (Webkit browsers: Chrome, Edge, Safari) --- */
+::-webkit-scrollbar {
+  width: 6px;   /* Thin scrollbar */
+}
+::-webkit-scrollbar-track {
+  background: var(--color-surface); /* Track matches card bg */
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);  /* Thumb is slightly visible */
+  border-radius: 3px;               /* Rounded scrollbar thumb */
+}
+
+/* --- RESPONSIVE: Adjust for small screens --- */
+@media (max-width: 600px) {
+  .hero { padding: 3rem 1rem 2.5rem; }     /* Less padding on mobile */
+  .api-grid { grid-template-columns: 1fr; } /* Stack cards vertically */
+  .concepts-grid { grid-template-columns: 1fr; }
+}

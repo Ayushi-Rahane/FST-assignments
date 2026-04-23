@@ -1,0 +1,152 @@
+<!-- Assignment 8A: Google REST APIs Explorer -->
+<!-- This HTML file creates a web page to explore Google REST APIs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Set character encoding to UTF-8 for international character support -->
+  <meta charset="UTF-8" />
+  <!-- Make the page responsive on all screen sizes -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Page title shown on browser tab -->
+  <title>Assignment 8A - Google REST APIs Explorer</title>
+  <!-- Link our external CSS stylesheet for styling -->
+  <link rel="stylesheet" href="index.css" />
+  <!-- Add FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Load Google Fonts (Inter for text, JetBrains Mono for code) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- Add a dummy favicon to prevent 404 errors in the console -->
+  <link rel="icon" href="data:,">
+  
+  <!-- Load our custom JavaScript file FIRST so its functions are defined -->
+  <script src="script.js"></script>
+  
+  <!-- Load Google API JS client library; calls initGapiClient() when loaded -->
+  <script src="https://apis.google.com/js/api.js" onload="initGapiClient()"></script>
+  <!-- Load Google Identity Services for OAuth 2.0 sign-in -->
+  <script src="https://accounts.google.com/gsi/client" onload="initGisClient()"></script>
+</head>
+<body>
+
+  <!-- HEADER SECTION: Page title and description -->
+  <header class="hero">
+    <div class="hero-gradient"></div>
+    <div class="hero-content">
+      <span class="badge">Assignment 8A — FST Lab</span>
+      <h1>Google REST APIs Explorer</h1>
+      <p class="subtitle">Interact programmatically with Google Apps — Drive, Calendar, Slides, Sheets &amp; Docs — using RESTful web services.</p>
+    </div>
+  </header>
+
+  <main class="container">
+
+
+    <!-- AUTH SECTION: Google Sign-In -->
+    <section class="auth-section" id="auth">
+      <h2 class="section-title"><span class="dot"></span>Step 1 — Authenticate with Google</h2>
+      <p class="auth-info">Sign in with your Google account using <strong>OAuth 2.0</strong> to get an access token for calling Google APIs.</p>
+      <div class="auth-controls">
+        <!-- Sign-in button calls handleSignIn() function -->
+        <button id="btn-sign-in" class="btn btn-primary" onclick="handleSignIn()"><i class="fa-solid fa-lock"></i> Sign in with Google</button>
+        <!-- Status text updated by JavaScript after sign-in -->
+        <span id="auth-status" class="auth-status"></span>
+      </div>
+    </section>
+
+    <!-- API EXPLORER SECTION: Interactive API cards -->
+    <section class="api-section" id="explorer">
+      <h2 class="section-title"><span class="dot"></span>Step 2 — Explore Google REST APIs</h2>
+      <div class="api-grid">
+
+        <!-- GOOGLE DRIVE CARD -->
+        <div class="api-card" id="card-drive">
+          <div class="api-card-header drive-header">
+            <span class="api-icon"><i class="fa-solid fa-folder"></i></span>
+            <div><h3>Google Drive</h3><p class="api-desc">List files from your Drive</p></div>
+          </div>
+          <div class="api-card-body">
+            <div class="http-method"><span class="method-badge get">GET</span><code>googleapis.com/drive/v3/files</code></div>
+            <p class="api-explain">Sends HTTP <strong>GET</strong> to Drive API v3. Returns JSON list of files (name, id, mimeType).</p>
+            <button class="btn btn-execute" onclick="listDriveFiles()"><i class="fa-solid fa-play"></i> Execute — List Files</button>
+          </div>
+          <div class="response-area" id="response-drive"></div>
+        </div>
+
+        <!-- GOOGLE CALENDAR CARD -->
+        <div class="api-card" id="card-calendar">
+          <div class="api-card-header calendar-header">
+            <span class="api-icon"><i class="fa-regular fa-calendar"></i></span>
+            <div><h3>Google Calendar</h3><p class="api-desc">Get primary calendar metadata</p></div>
+          </div>
+          <div class="api-card-body">
+            <div class="http-method"><span class="method-badge get">GET</span><code>googleapis.com/calendar/v3/calendars/primary</code></div>
+            <p class="api-explain">Sends HTTP <strong>GET</strong> to Calendar API v3. Returns metadata (summary, timeZone, id).</p>
+            <button class="btn btn-execute" onclick="getCalendarMetadata()"><i class="fa-solid fa-play"></i> Execute — Get Calendar</button>
+          </div>
+          <div class="response-area" id="response-calendar"></div>
+        </div>
+
+        <!-- GOOGLE SLIDES CARD -->
+        <div class="api-card" id="card-slides">
+          <div class="api-card-header slides-header">
+            <span class="api-icon"><i class="fa-solid fa-chart-bar"></i></span>
+            <div><h3>Google Slides</h3><p class="api-desc">Create a blank presentation</p></div>
+          </div>
+          <div class="api-card-body">
+            <div class="http-method"><span class="method-badge post">POST</span><code>slides.googleapis.com/v1/presentations</code></div>
+            <p class="api-explain">Sends HTTP <strong>POST</strong> to Slides API v1. Creates a blank presentation. Verify in Drive.</p>
+            <button class="btn btn-execute" onclick="createSlide()"><i class="fa-solid fa-play"></i> Execute — Create Presentation</button>
+          </div>
+          <div class="response-area" id="response-slides"></div>
+        </div>
+
+        <!-- GOOGLE SHEETS CARD -->
+        <div class="api-card" id="card-sheets">
+          <div class="api-card-header sheets-header">
+            <span class="api-icon"><i class="fa-solid fa-table-cells"></i></span>
+            <div><h3>Google Sheets</h3><p class="api-desc">Create a new spreadsheet</p></div>
+          </div>
+          <div class="api-card-body">
+            <div class="http-method"><span class="method-badge post">POST</span><code>sheets.googleapis.com/v4/spreadsheets</code></div>
+            <p class="api-explain">Sends HTTP <strong>POST</strong> to Sheets API v4. Creates a spreadsheet. Open returned URL to verify.</p>
+            <button class="btn btn-execute" onclick="createSheet()"><i class="fa-solid fa-play"></i> Execute — Create Spreadsheet</button>
+          </div>
+          <div class="response-area" id="response-sheets"></div>
+        </div>
+
+        <!-- GOOGLE DOCS CARD -->
+        <div class="api-card" id="card-docs">
+          <div class="api-card-header docs-header">
+            <span class="api-icon"><i class="fa-solid fa-file-lines"></i></span>
+            <div><h3>Google Docs</h3><p class="api-desc">Create a blank document</p></div>
+          </div>
+          <div class="api-card-body">
+            <div class="http-method"><span class="method-badge post">POST</span><code>docs.googleapis.com/v1/documents</code></div>
+            <p class="api-explain">Sends HTTP <strong>POST</strong> to Docs API v1. Creates a blank Google Doc. Verify in Drive.</p>
+            <button class="btn btn-execute" onclick="createDoc()"><i class="fa-solid fa-play"></i> Execute — Create Document</button>
+          </div>
+          <div class="response-area" id="response-docs"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- HTTP LOG SECTION: Shows request/response history -->
+    <section class="log-section" id="log">
+      <h2 class="section-title"><span class="dot"></span>HTTP Request / Response Log</h2>
+      <p class="log-info">Every API call generates an HTTP request. Below you can see the method, URL, and JSON response.</p>
+      <div id="http-log" class="http-log">
+        <p class="log-placeholder">No API calls made yet. Click an Execute button above ↑</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>Assignment 8A — Google REST APIs Explorer · FST Lab · 2026</p>
+  </footer>
+</body>
+</html>
