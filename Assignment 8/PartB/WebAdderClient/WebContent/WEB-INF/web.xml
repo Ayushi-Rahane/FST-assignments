@@ -1,0 +1,44 @@
+<!-- ============================================================ -->
+<!-- FILE: web.xml (Client-side Deployment Descriptor)             -->
+<!--                                                              -->
+<!-- This is the web.xml file for the WebAdderClient project.     -->
+<!-- The CLIENT project is the program that CALLS (consumes) the  -->
+<!-- web service. It's separate from the server project.          -->
+<!--                                                              -->
+<!-- This file configures the client web application so Tomcat    -->
+<!-- knows how to serve the TestClient.jsp page.                  -->
+<!-- ============================================================ -->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Standard XML declaration -->
+
+<web-app
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+        http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+    id="WebAdderClient"
+    version="2.5">
+
+    <!-- Display name shown in Tomcat manager -->
+    <display-name>WebAdderClient</display-name>
+
+    <!-- Welcome files: pages shown when visiting the root URL -->
+    <!-- of this client application -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>default.html</welcome-file>
+        <welcome-file>default.htm</welcome-file>
+        <welcome-file>default.jsp</welcome-file>
+    </welcome-file-list>
+
+</web-app>
+
+<!-- ============================================================ -->
+<!-- NOTE: Unlike the WebAdder (server) project's web.xml,        -->
+<!-- this client-side web.xml does NOT need a servlet for          -->
+<!-- Apache Axis, because the client doesn't serve web services   -->
+<!-- — it only CALLS them. The JSP page handles the client logic. -->
+<!-- ============================================================ -->

@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student REST API — Assignment 6</title>
+  <meta name="description" content="Student Management System using Spring Boot RESTful Web Services — FST Assignment 6" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* ── DESIGN TOKENS ── */
+    :root {
+      --bg:        #0a0e1a;
+      --bg2:       #111827;
+      --bg3:       #1c2537;
+      --border:    #2a3650;
+      --accent:    #6366f1;
+      --accent2:   #818cf8;
+      --green:     #10b981;
+      --red:       #f43f5e;
+      --amber:     #f59e0b;
+      --blue:      #38bdf8;
+      --text:      #e2e8f0;
+      --muted:     #64748b;
+      --card:      rgba(28,37,55,0.8);
+      --radius:    14px;
+      --shadow:    0 8px 32px rgba(0,0,0,0.5);
+    }
+
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99,102,241,.18), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(16,185,129,.10), transparent);
+    }
+
+    /* ── HEADER ── */
+    header {
+      text-align: center;
+      padding: 54px 20px 36px;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(99,102,241,.15);
+      border: 1px solid rgba(99,102,241,.35);
+      color: var(--accent2);
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 99px;
+      margin-bottom: 18px;
+    }
+    header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #e2e8f0 30%, var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+    header h1 i {
+      color: var(--accent2);
+    }
+    header p {
+      color: var(--muted);
+      margin-top: 10px;
+      font-size: .95rem;
+    }
+
+    /* ── METHOD PILLS ── */
+    .methods-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 30px 20px 0;
+    }
+    .method-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: default;
+    }
+    .method-pill .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .pill-get    { border-color: rgba(56,189,248,.4); color: var(--blue); }
+    .pill-get .dot    { background: var(--blue); }
+    .pill-post   { border-color: rgba(16,185,129,.4); color: var(--green); }
+    .pill-post .dot   { background: var(--green); }
+    .pill-put    { border-color: rgba(245,158,11,.4); color: var(--amber); }
+    .pill-put .dot    { background: var(--amber); }
+    .pill-delete { border-color: rgba(244,63,94,.4);  color: var(--red); }
+    .pill-delete .dot { background: var(--red); }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1120px; margin: 0 auto; padding: 40px 20px 80px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    @media(max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 26px;
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      transition: border-color .25s, transform .25s;
+    }
+    .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .card-title .method-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+    }
+    .tag-get    { background: rgba(56,189,248,.15); color: var(--blue); }
+    .tag-post   { background: rgba(16,185,129,.15); color: var(--green); }
+    .tag-put    { background: rgba(245,158,11,.15); color: var(--amber); }
+    .tag-delete { background: rgba(244,63,94,.15);  color: var(--red); }
+    .card-title h2 { font-size: 1rem; font-weight: 600; }
+
+    /* ── FORM ELEMENTS ── */
+    .form-group { margin-bottom: 14px; }
+    label { display: block; font-size: .8rem; color: var(--muted); margin-bottom: 5px; font-weight: 500; }
+    input {
+      width: 100%;
+      background: rgba(10,14,26,.6);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: .9rem;
+      font-family: 'Inter', sans-serif;
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+    }
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99,102,241,.15);
+    }
+    input::placeholder { color: var(--muted); }
+
+    /* ── BUTTONS ── */
+    .btn {
+      width: 100%;
+      padding: 11px;
+      border: none;
+      border-radius: 9px;
+      font-size: .9rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: opacity .2s, transform .15s, box-shadow .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 4px;
+    }
+    .btn i { width: 18px; height: 18px; }
+    .btn:hover   { opacity: .88; transform: translateY(-1px); }
+    .btn:active  { transform: scale(.97); }
+    .btn-get     { background: linear-gradient(135deg, #0ea5e9, #38bdf8); color: #fff; }
+    .btn-post    { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+    .btn-put     { background: linear-gradient(135deg, #d97706, #f59e0b); color: #111; }
+    .btn-delete  { background: linear-gradient(135deg, #e11d48, #f43f5e); color: #fff; }
+
+    /* ── RESPONSE PANEL ── */
+    .response-panel {
+      margin-top: 16px;
+      background: rgba(10,14,26,.7);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .response-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: .75rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .status-badge {
+      padding: 2px 9px;
+      border-radius: 99px;
+      font-size: .72rem;
+      font-weight: 700;
+    }
+    .status-ok     { background: rgba(16,185,129,.2);  color: var(--green); }
+    .status-err    { background: rgba(244,63,94,.2);   color: var(--red); }
+    .status-idle   { background: rgba(100,116,139,.15); color: var(--muted); }
+    pre {
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .8rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #a5f3fc;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    /* ── STUDENTS TABLE (full-width card) ── */
+    .table-card { grid-column: 1 / -1; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    thead tr { background: rgba(99,102,241,.1); }
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 12px 16px;
+      font-size: .88rem;
+      border-bottom: 1px solid rgba(42,54,80,.5);
+    }
+    tbody tr { transition: background .15s; }
+    tbody tr:hover { background: rgba(99,102,241,.06); }
+    .roll-badge {
+      background: rgba(99,102,241,.15);
+      color: var(--accent2);
+      border-radius: 6px;
+      padding: 2px 9px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .82rem;
+      font-weight: 700;
+    }
+    .marks-bar-wrap { display: flex; align-items: center; gap: 10px; }
+    .marks-bar {
+      flex: 1;
+      height: 5px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .marks-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+      font-size: .9rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .empty-state i { width: 32px; height: 32px; opacity: 0.5; }
+
+    /* ── TOAST ── */
+    #toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+    .toast {
+      padding: 13px 20px;
+      border-radius: 10px;
+      font-size: .87rem;
+      font-weight: 500;
+      backdrop-filter: blur(12px);
+      border: 1px solid;
+      animation: slideIn .3s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,.4);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toast i { width: 18px; height: 18px; }
+    .toast-success { background: rgba(16,185,129,.15); border-color: rgba(16,185,129,.4); color: var(--green); }
+    .toast-error   { background: rgba(244,63,94,.15);  border-color: rgba(244,63,94,.4);  color: var(--red);   }
+    @keyframes slideIn { from { transform: translateX(60px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+    /* ── LOADER SPINNER ── */
+    .spinner {
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      display: none;
+    }
+    .btn.loading .spinner { display: block; }
+    .btn.loading .btn-text, .btn.loading i { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="badge">Assignment No. 6 · Group A · REST Web Services</div>
+  <h1><i data-lucide="graduation-cap"></i> Student Management REST API</h1>
+  <p>Spring Boot · Jakarta API · HTTP Methods: GET · POST · PUT · DELETE</p>
+</header>
+
+<!-- ── METHOD LEGEND ── -->
+<div class="methods-bar">
+  <div class="method-pill pill-get">    <div class="dot"></div> GET — Retrieve </div>
+  <div class="method-pill pill-post">   <div class="dot"></div> POST — Create  </div>
+  <div class="method-pill pill-put">    <div class="dot"></div> PUT — Update   </div>
+  <div class="method-pill pill-delete"> <div class="dot"></div> DELETE — Remove</div>
+</div>
+
+<!-- ── MAIN GRID ── -->
+<div class="container">
+  <div class="grid">
+
+    <!-- ═══ VIEW ALL STUDENTS ═══ -->
+    <div class="card table-card">
+      <div class="card-title">
+        <span class="method-tag tag-get">GET</span>
+        <h2>All Students — <code style="font-size:.8rem;color:var(--muted)">/api/students</code></h2>
+        <button class="btn btn-get" id="btn-get-all" onclick="getAllStudents()" style="width:auto;padding:8px 18px;margin:0 0 0 auto">
+          <i data-lucide="refresh-cw"></i>
+          <span class="btn-text">Refresh</span>
+          <div class="spinner"></div>
+        </button>
+      </div>
+      <div id="table-container">
+        <div class="empty-state">
+          <i data-lucide="database"></i>
+          <span>Click Refresh to load students.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ GET BY ROLL ═══ -->
+    <div class="card">
+      <div class="card-title">
+        <span class="method-tag tag-get">GET</span>
+        <h2>Find Student by Roll No</h2>
+      </div>
+      <div class="form-group">
+        <label>Roll Number</label>
+        <input type="number" id="get-roll" placeholder="e.g. 101" />
+      </div>
+      <button class="btn btn-get" id="btn-get-one" onclick="getStudentByRoll()">
+        <i data-lucide="search"></i>
+        <span class="btn-text">Find Student</span>
+        <div class="spinner"></div>
+      </button>
+      <div class="response-panel">
+        <div class="response-header">
+          Response <span class="status-badge status-idle" id="get-status">IDLE</span>
+        </div>
+        <pre id="get-response">—</pre>
+      </div>
+    </div>
+
+    <!-- ═══ ADD STUDENT ═══ -->
+    <div class="card">
+      <div class="card-title">
+        <span class="method-tag tag-post">POST</span>
+        <h2>Add New Student</h2>
+      </div>
+      <div class="form-group">
+        <label>Roll Number</label>
+        <input type="number" id="add-roll" placeholder="e.g. 201" />
+      </div>
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="add-name" placeholder="e.g. Sneha Patil" />
+      </div>
+      <div class="form-group">
+        <label>Marks (out of 100)</label>
+        <input type="number" id="add-marks" placeholder="e.g. 85.5" step="0.1" />
+      </div>
+      <button class="btn btn-post" id="btn-post" onclick="addStudent()">
+        <i data-lucide="plus-circle"></i>
+        <span class="btn-text">Add Student</span>
+        <div class="spinner"></div>
+      </button>
+      <div class="response-panel">
+        <div class="response-header">
+          Response <span class="status-badge status-idle" id="post-status">IDLE</span>
+        </div>
+        <pre id="post-response">—</pre>
+      </div>
+    </div>
+
+    <!-- ═══ UPDATE STUDENT ═══ -->
+    <div class="card">
+      <div class="card-title">
+        <span class="method-tag tag-put">PUT</span>
+        <h2>Update Student Details</h2>
+      </div>
+      <div class="form-group">
+        <label>Roll Number (to update)</label>
+        <input type="number" id="upd-roll" placeholder="e.g. 101" />
+      </div>
+      <div class="form-group">
+        <label>New Name</label>
+        <input type="text" id="upd-name" placeholder="e.g. Ayushi Rahane" />
+      </div>
+      <div class="form-group">
+        <label>New Marks</label>
+        <input type="number" id="upd-marks" placeholder="e.g. 95.0" step="0.1" />
+      </div>
+      <button class="btn btn-put" id="btn-put" onclick="updateStudent()">
+        <i data-lucide="edit-3"></i>
+        <span class="btn-text">Update Student</span>
+        <div class="spinner"></div>
+      </button>
+      <div class="response-panel">
+        <div class="response-header">
+          Response <span class="status-badge status-idle" id="put-status">IDLE</span>
+        </div>
+        <pre id="put-response">—</pre>
+      </div>
+    </div>
+
+    <!-- ═══ DELETE STUDENT ═══ -->
+    <div class="card">
+      <div class="card-title">
+        <span class="method-tag tag-delete">DELETE</span>
+        <h2>Delete Student</h2>
+      </div>
+      <div class="form-group">
+        <label>Roll Number</label>
+        <input type="number" id="del-roll" placeholder="e.g. 103" />
+      </div>
+      <button class="btn btn-delete" id="btn-delete" onclick="deleteStudent()">
+        <i data-lucide="trash-2"></i>
+        <span class="btn-text">Delete Student</span>
+        <div class="spinner"></div>
+      </button>
+      <div class="response-panel">
+        <div class="response-header">
+          Response <span class="status-badge status-idle" id="del-status">IDLE</span>
+        </div>
+        <pre id="del-response">—</pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── TOAST CONTAINER ── -->
+<div id="toast-container"></div>
+
+<script>
+  // Initialize icons
+  lucide.createIcons();
+
+  // ─── CONFIG ─────────────────────────────────────────────
+  const API_BASE = 'http://localhost:8080/api/students';
+
+  // ─── UTILITY: set loading state ─────────────────────────
+  function setLoading(btnId, on) {
+    const btn = document.getElementById(btnId);
+    btn.classList.toggle('loading', on);
+    btn.disabled = on;
+  }
+
+  // ─── UTILITY: display response ───────────────────────────
+  function showResponse(preId, statusId, data, ok) {
+    document.getElementById(preId).textContent = JSON.stringify(data, null, 2);
+    const badge = document.getElementById(statusId);
+    badge.textContent = ok ? 'OK' : 'ERROR';
+    badge.className = 'status-badge ' + (ok ? 'status-ok' : 'status-err');
+  }
+
+  // ─── UTILITY: toast notification ────────────────────────
+  function toast(msg, type = 'success') {
+    const el = document.createElement('div');
+    el.className = `toast toast-${type}`;
+    const icon = type === 'success' ? 'check-circle' : 'alert-circle';
+    el.innerHTML = `<i data-lucide="${icon}"></i><span>${msg}</span>`;
+    document.getElementById('toast-container').appendChild(el);
+    lucide.createIcons({
+      root: el
+    });
+    setTimeout(() => el.remove(), 3500);
+  }
+
+  // ─── UTILITY: render students table ─────────────────────
+  function renderTable(students) {
+    const container = document.getElementById('table-container');
+    if (!students || students.length === 0) {
+      container.innerHTML = '<div class="empty-state"><i data-lucide="user-x"></i><span>No students found in the database.</span></div>';
+      lucide.createIcons({ root: container });
+      return;
+    }
+    let rows = students.map(s => `
+      <tr>
+        <td><span class="roll-badge">#${s.rollNumber}</span></td>
+        <td>${s.name}</td>
+        <td>
+          <div class="marks-bar-wrap">
+            <span>${s.marks}</span>
+            <div class="marks-bar"><div class="marks-fill" style="width:${Math.min(s.marks,100)}%"></div></div>
+          </div>
+        </td>
+      </tr>`).join('');
+    container.innerHTML = `
+      <table>
+        <thead><tr>
+          <th>Roll No</th><th>Name</th><th>Marks / 100</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  }
+
+  // ─── GET ALL STUDENTS ────────────────────────────────────
+  async function getAllStudents() {
+    setLoading('btn-get-all', true);
+    try {
+      const res = await fetch(API_BASE);
+      const data = await res.json();
+      renderTable(data);
+      toast(`Loaded ${data.length} student(s)`);
+    } catch (e) {
+      document.getElementById('table-container').innerHTML =
+        `<div class="empty-state" style="color:var(--red)"><i data-lucide="wifi-off"></i><span>Cannot connect to API. Make sure Spring Boot is running on port 8080.</span></div>`;
+      lucide.createIcons({ root: document.getElementById('table-container') });
+      toast('Connection failed — is the server running?', 'error');
+    } finally {
+      setLoading('btn-get-all', false);
+    }
+  }
+
+  // ─── GET STUDENT BY ROLL ─────────────────────────────────
+  async function getStudentByRoll() {
+    const roll = document.getElementById('get-roll').value.trim();
+    if (!roll) { toast('Enter a Roll Number', 'error'); return; }
+    setLoading('btn-get-one', true);
+    try {
+      const res  = await fetch(`${API_BASE}/${roll}`);
+      const data = await res.json();
+      showResponse('get-response', 'get-status', data, res.ok);
+      res.ok ? toast(`Student #${roll} found`) : toast(data.error, 'error');
+    } catch (e) {
+      showResponse('get-response', 'get-status', { error: 'Connection failed' }, false);
+      toast('Connection failed', 'error');
+    } finally {
+      setLoading('btn-get-one', false);
+    }
+  }
+
+  // ─── ADD STUDENT (POST) ──────────────────────────────────
+  async function addStudent() {
+    const roll  = document.getElementById('add-roll').value.trim();
+    const name  = document.getElementById('add-name').value.trim();
+    const marks = document.getElementById('add-marks').value.trim();
+    if (!roll || !name || !marks) { toast('Fill all fields', 'error'); return; }
+
+    const payload = { rollNumber: parseInt(roll), name, marks: parseFloat(marks) };
+    setLoading('btn-post', true);
+    try {
+      const res  = await fetch(API_BASE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      showResponse('post-response', 'post-status', data, res.ok);
+      if (res.ok) {
+        toast(`Student #${roll} added successfully`);
+        getAllStudents();
+        ['add-roll','add-name','add-marks'].forEach(id => document.getElementById(id).value = '');
+      } else {
+        toast(data.error, 'error');
+      }
+    } catch (e) {
+      showResponse('post-response', 'post-status', { error: 'Connection failed' }, false);
+      toast('Connection failed', 'error');
+    } finally {
+      setLoading('btn-post', false);
+    }
+  }
+
+  // ─── UPDATE STUDENT (PUT) ────────────────────────────────
+  async function updateStudent() {
+    const roll  = document.getElementById('upd-roll').value.trim();
+    const name  = document.getElementById('upd-name').value.trim();
+    const marks = document.getElementById('upd-marks').value.trim();
+    if (!roll || !name || !marks) { toast('Fill all fields', 'error'); return; }
+
+    const payload = { rollNumber: parseInt(roll), name, marks: parseFloat(marks) };
+    setLoading('btn-put', true);
+    try {
+      const res  = await fetch(`${API_BASE}/${roll}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      showResponse('put-response', 'put-status', data, res.ok);
+      if (res.ok) {
+        toast(`Student #${roll} updated successfully`);
+        getAllStudents();
+      } else {
+        toast(data.error, 'error');
+      }
+    } catch (e) {
+      showResponse('put-response', 'put-status', { error: 'Connection failed' }, false);
+      toast('Connection failed', 'error');
+    } finally {
+      setLoading('btn-put', false);
+    }
+  }
+
+  // ─── DELETE STUDENT ──────────────────────────────────────
+  async function deleteStudent() {
+    const roll = document.getElementById('del-roll').value.trim();
+    if (!roll) { toast('Enter a Roll Number', 'error'); return; }
+    setLoading('btn-delete', true);
+    try {
+      const res  = await fetch(`${API_BASE}/${roll}`, { method: 'DELETE' });
+      const data = await res.json();
+      showResponse('del-response', 'del-status', data, res.ok);
+      if (res.ok) {
+        toast(`Student #${roll} deleted`);
+        getAllStudents();
+        document.getElementById('del-roll').value = '';
+      } else {
+        toast(data.error, 'error');
+      }
+    } catch (e) {
+      showResponse('del-response', 'del-status', { error: 'Connection failed' }, false);
+      toast('Connection failed', 'error');
+    } finally {
+      setLoading('btn-delete', false);
+    }
+  }
+
+  // Auto-load on page start
+  window.addEventListener('DOMContentLoaded', getAllStudents);
+</script>
+</body>
+</html>

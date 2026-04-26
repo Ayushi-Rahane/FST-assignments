@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================ -->
+<!-- FILE: pom.xml (Project Object Model)                          -->
+<!--                                                              -->
+<!-- WHAT IS POM.XML?                                             -->
+<!-- This is the configuration file for Maven — a build tool      -->
+<!-- that manages our Java project. It tells Maven:               -->
+<!--   1. What libraries (dependencies) our project needs         -->
+<!--   2. What Java version to use for compiling                  -->
+<!--   3. How to build and run our project                        -->
+<!--                                                              -->
+<!-- THINK OF IT LIKE A RECIPE:                                   -->
+<!-- It lists all the "ingredients" (libraries) we need and       -->
+<!-- the "cooking instructions" (build settings) to follow.       -->
+<!--                                                              -->
+<!-- WHY DO WE NEED IT?                                           -->
+<!-- Since JDK 11 removed built-in JAX-WS (SOAP) libraries,      -->
+<!-- we need to download them from the internet. Maven does       -->
+<!-- this automatically for us!                                   -->
+<!-- ============================================================ -->
+
+<!-- Root element: tells Maven this is a POM file -->
+<!-- The xmlns attributes define the XML vocabulary (namespace) -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+            http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- POM version: always 4.0.0 for Maven 2 and 3 -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ======================================================== -->
+    <!-- PROJECT IDENTITY                                          -->
+    <!-- These three fields uniquely identify our project,         -->
+    <!-- like a person's full name + address.                      -->
+    <!-- ======================================================== -->
+
+    <!-- groupId: Organization/company name (like a last name) -->
+    <groupId>com.tutorial.ws</groupId>
+
+    <!-- artifactId: Project name (like a first name) -->
+    <artifactId>WebAdderSOAP</artifactId>
+
+    <!-- version: Which version of the project this is -->
+    <version>1.0</version>
+
+    <!-- packaging: What type of output to create -->
+    <!-- "jar" = Java ARchive, a packaged Java application -->
+    <packaging>jar</packaging>
+
+    <!-- Human-readable project name -->
+    <name>WebAdder SOAP Web Service</name>
+
+    <!-- ======================================================== -->
+    <!-- PROPERTIES: Project-wide settings                         -->
+    <!-- Think of these as "global variables" for the build file   -->
+    <!-- ======================================================== -->
+    <properties>
+        <!-- Tell Maven our source code uses Java 11 -->
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+
+        <!-- Use UTF-8 encoding for source files -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!-- ======================================================== -->
+    <!-- DEPENDENCIES: Libraries our project needs                 -->
+    <!-- Maven will automatically download these from the internet -->
+    <!-- Think of them as "ingredients" — we list what we need     -->
+    <!-- and Maven goes to the store (Maven Central) to get them   -->
+    <!-- ======================================================== -->
+    <dependencies>
+
+        <!-- ================================================== -->
+        <!-- JAX-WS API: The core SOAP web service library       -->
+        <!-- JAX-WS = Java API for XML Web Services              -->
+        <!-- This provides annotations like @WebService that let -->
+        <!-- us turn a regular Java class into a web service.    -->
+        <!-- In JDK 8, this was built-in. In JDK 11+, we need   -->
+        <!-- to add it manually.                                 -->
+        <!-- ================================================== -->
+        <dependency>
+            <groupId>jakarta.xml.ws</groupId>
+            <artifactId>jakarta.xml.ws-api</artifactId>
+            <version>2.3.3</version>
+        </dependency>
+
+        <!-- ================================================== -->
+        <!-- JAX-WS Runtime Implementation (Metro/Sun RI)        -->
+        <!-- The API above only defines WHAT methods exist.      -->
+        <!-- This library provides the actual IMPLEMENTATION —   -->
+        <!-- the code that creates SOAP messages, sends them     -->
+        <!-- over HTTP, etc.                                     -->
+        <!-- Think of it as: API = recipe, Runtime = the chef    -->
+        <!-- ================================================== -->
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-rt</artifactId>
+            <version>2.3.7</version>
+        </dependency>
+
+    </dependencies>
+
+    <!-- ======================================================== -->
+    <!-- BUILD PLUGINS: Tools that help build and run the project  -->
+    <!-- ======================================================== -->
+    <build>
+        <plugins>
+            <!-- Maven Compiler Plugin: controls Java compilation -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+
+            <!-- ================================================ -->
+            <!-- Exec Maven Plugin: lets us run Java classes       -->
+            <!-- directly from Maven using "mvn exec:java"         -->
+            <!-- This is how we'll start the server and client!    -->
+            <!-- ================================================ -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

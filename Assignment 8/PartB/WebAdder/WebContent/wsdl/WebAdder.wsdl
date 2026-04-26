@@ -1,0 +1,213 @@
+<!-- ============================================================ -->
+<!-- FILE: WebAdder.wsdl (Web Services Description Language)       -->
+<!--                                                              -->
+<!-- WHAT IS WSDL?                                                -->
+<!-- WSDL is an XML document that DESCRIBES our web service.      -->
+<!-- It tells clients (other programs):                           -->
+<!--   - WHAT methods are available (e.g., "addition")            -->
+<!--   - WHAT inputs each method needs (e.g., nm1, nm2)           -->
+<!--   - WHAT output each method returns (e.g., additionReturn)   -->
+<!--   - WHERE the service is located (URL/endpoint)              -->
+<!--   - HOW to communicate with it (using SOAP protocol)         -->
+<!--                                                              -->
+<!-- Think of WSDL like a "Menu Card" at a restaurant:            -->
+<!--   - It lists all dishes (methods)                            -->
+<!--   - Tells you ingredients needed (input parameters)          -->
+<!--   - Tells you what you'll get (return type)                  -->
+<!--   - Tells you the restaurant address (endpoint URL)          -->
+<!--                                                              -->
+<!-- WHO CREATES THIS FILE?                                       -->
+<!-- Eclipse automatically generates this WSDL file when we       -->
+<!-- convert our Java class into a web service using the wizard.  -->
+<!-- We don't write it by hand!                                   -->
+<!--                                                              -->
+<!-- WHO READS THIS FILE?                                         -->
+<!-- Client programs read this WSDL to understand how to call     -->
+<!-- our web service. It's like a "contract" between the server   -->
+<!-- and the client.                                              -->
+<!-- ============================================================ -->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Standard XML declaration — tells the parser this is XML with UTF-8 encoding -->
+
+<!-- ============================================================ -->
+<!-- ROOT ELEMENT: <wsdl:definitions>                             -->
+<!-- This is the root (outermost) element of the WSDL document.   -->
+<!-- It contains ALL the information about our web service.       -->
+<!-- The "xmlns" attributes define namespaces (like dictionaries)  -->
+<!-- that tell the computer what vocabulary we're using.           -->
+<!-- ============================================================ -->
+<wsdl:definitions
+    xmlns:apachesoap="http://xml.apache.org/xml-soap"
+    xmlns:impl="http://ws.tutorial.com"
+    xmlns:intf="http://ws.tutorial.com"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://ws.tutorial.com"
+    name="WebAdderService">
+    <!-- targetNamespace: A unique identifier for our web service -->
+    <!-- Think of it like a unique ID/address for the service -->
+    <!-- "http://ws.tutorial.com" is created from our package name -->
+    <!-- (com.tutorial.ws reversed becomes ws.tutorial.com) -->
+    <!-- name: The name of our web service -->
+
+    <!-- ======================================================== -->
+    <!-- SECTION 1: TYPES                                          -->
+    <!-- This section defines the DATA TYPES used by our service.  -->
+    <!-- It describes WHAT kind of data goes in and comes out.     -->
+    <!-- Think of it as defining the "shapes" of our data.         -->
+    <!-- ======================================================== -->
+    <wsdl:types>
+        <!-- XML Schema is used to define data types -->
+        <!-- It's like defining "blueprints" for our data -->
+        <xsd:schema
+            elementFormDefault="qualified"
+            targetNamespace="http://ws.tutorial.com">
+
+            <!-- ================================================ -->
+            <!-- INPUT TYPE for "addition" method                  -->
+            <!-- This defines WHAT the client needs to SEND        -->
+            <!-- to call the addition method.                      -->
+            <!-- ================================================ -->
+            <xsd:element name="addition">
+                <!-- "complexType" means this element contains -->
+                <!-- multiple pieces of data (not just one value) -->
+                <xsd:complexType>
+                    <!-- "sequence" means the elements must appear -->
+                    <!-- in this specific order -->
+                    <xsd:sequence>
+                        <!-- nm1: First number to add -->
+                        <!-- "xsd:int" means it must be an integer -->
+                        <xsd:element name="nm1" type="xsd:int"/>
+                        <!-- nm2: Second number to add -->
+                        <xsd:element name="nm2" type="xsd:int"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <!-- ================================================ -->
+            <!-- OUTPUT TYPE for "addition" method                 -->
+            <!-- This defines WHAT the server will SEND BACK       -->
+            <!-- after the addition method runs.                   -->
+            <!-- ================================================ -->
+            <xsd:element name="additionResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <!-- additionReturn: The result of addition -->
+                        <!-- Also an integer (sum of nm1 + nm2) -->
+                        <xsd:element name="additionReturn" type="xsd:int"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+        </xsd:schema>
+    </wsdl:types>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 2: MESSAGES                                       -->
+    <!-- Messages define the DATA that flows between client and    -->
+    <!-- server. Think of them as "letters" being exchanged.       -->
+    <!--   - Request message = letter from client to server        -->
+    <!--   - Response message = reply letter from server to client -->
+    <!-- ======================================================== -->
+
+    <!-- This is the REQUEST message (what client sends) -->
+    <wsdl:message name="additionRequest">
+        <!-- "part" links this message to the data type defined above -->
+        <!-- element="impl:addition" refers to the "addition" element -->
+        <!-- we defined in the types section -->
+        <wsdl:part element="impl:addition" name="parameters"/>
+    </wsdl:message>
+
+    <!-- This is the RESPONSE message (what server sends back) -->
+    <wsdl:message name="additionResponse">
+        <!-- Links to the "additionResponse" element defined above -->
+        <wsdl:part element="impl:additionResponse" name="parameters"/>
+    </wsdl:message>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 3: PORT TYPE                                      -->
+    <!-- Port Type defines the OPERATIONS (methods) available.     -->
+    <!-- Think of it as a "list of services" the web service offers-->
+    <!-- It's similar to a Java Interface — it declares WHAT       -->
+    <!-- methods exist without showing the actual code.            -->
+    <!-- ======================================================== -->
+    <wsdl:portType name="WebAdder">
+        <!-- Each "operation" is one method the service offers -->
+        <wsdl:operation name="addition">
+            <!-- Input: what the client sends (the two numbers) -->
+            <wsdl:input message="impl:additionRequest" name="additionRequest"/>
+            <!-- Output: what the server returns (the sum) -->
+            <wsdl:output message="impl:additionResponse" name="additionResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 4: BINDING                                        -->
+    <!-- Binding defines HOW the messages are sent over the network-->
+    <!-- It specifies:                                             -->
+    <!--   - Protocol to use (SOAP)                                -->
+    <!--   - Message format (document/literal)                     -->
+    <!--   - Transport mechanism (HTTP)                            -->
+    <!-- Think of it as choosing the "delivery method" — like      -->
+    <!-- choosing between mail, email, or courier service.         -->
+    <!-- ======================================================== -->
+    <wsdl:binding name="WebAdderSoapBinding" type="impl:WebAdder">
+        <!-- "style=document" means we use document-style SOAP -->
+        <!-- (the other option is "rpc" style) -->
+        <!-- "transport" specifies we use HTTP to send SOAP messages -->
+        <wsdlsoap:binding style="document"
+            transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <!-- Binding details for the "addition" operation -->
+        <wsdl:operation name="addition">
+            <!-- "soapAction" is an HTTP header that identifies -->
+            <!-- which operation is being called -->
+            <wsdlsoap:operation soapAction=""/>
+
+            <!-- How the INPUT message is formatted -->
+            <wsdl:input name="additionRequest">
+                <!-- "literal" means the XML data is sent as-is -->
+                <!-- (not encoded in any special way) -->
+                <wsdlsoap:body use="literal"/>
+            </wsdl:input>
+
+            <!-- How the OUTPUT message is formatted -->
+            <wsdl:output name="additionResponse">
+                <wsdlsoap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 5: SERVICE                                        -->
+    <!-- This section defines WHERE the web service is located.    -->
+    <!-- It provides the actual URL (endpoint) where clients can   -->
+    <!-- send their SOAP requests.                                 -->
+    <!-- Think of it as the "address" of the restaurant.           -->
+    <!-- ======================================================== -->
+    <wsdl:service name="WebAdderService">
+        <!-- "port" connects a binding to a specific network address -->
+        <wsdl:port binding="impl:WebAdderSoapBinding" name="WebAdder">
+            <!-- This is the actual URL where the web service lives -->
+            <!-- Clients will send SOAP messages to THIS address -->
+            <wsdlsoap:address
+                location="http://localhost:8080/WebAdder/services/WebAdder"/>
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>
+
+<!-- ============================================================ -->
+<!-- WSDL STRUCTURE SUMMARY (like a Restaurant Analogy):           -->
+<!--                                                              -->
+<!-- TYPES    = What ingredients (data) are used                   -->
+<!-- MESSAGES = What's on each order slip (request/response)       -->
+<!-- PORT TYPE = The menu (list of available dishes/methods)       -->
+<!-- BINDING  = How orders are placed (SOAP over HTTP)             -->
+<!-- SERVICE  = The restaurant's address (endpoint URL)            -->
+<!--                                                              -->
+<!-- The style used here is "document/literal (wrapped)" which     -->
+<!-- is the most common and recommended style for SOAP services.   -->
+<!-- ============================================================ -->

@@ -1,0 +1,128 @@
+<!-- ============================================================ -->
+<!-- FILE: web.xml (Deployment Descriptor)                        -->
+<!--                                                              -->
+<!-- WHAT IS web.xml?                                             -->
+<!-- This is the "configuration file" for our web application.    -->
+<!-- It tells the Tomcat server HOW to run our web application.   -->
+<!-- Think of it like a "rulebook" or "instruction manual" that   -->
+<!-- the server reads when it starts up.                          -->
+<!--                                                              -->
+<!-- WHY DO WE NEED IT?                                           -->
+<!-- Without this file, Tomcat won't know which classes to load,  -->
+<!-- which URLs to respond to, or how to handle incoming requests.-->
+<!-- It's like giving directions to a delivery person — without   -->
+<!-- directions, they can't find the right house.                 -->
+<!-- ============================================================ -->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- "xml version" tells the computer this is an XML file -->
+<!-- "encoding=UTF-8" means we're using standard text encoding -->
+<!-- that supports all languages and special characters -->
+
+<!-- This is the root element of the deployment descriptor. -->
+<!-- "web-app" means this file describes a web application. -->
+<!-- "version=2.5" means we're using Servlet specification 2.5 -->
+<!-- (this matches the Dynamic Web Module version we selected -->
+<!-- when creating the project in Eclipse). -->
+<!-- The "xmlns" attributes define the XML namespaces — they are -->
+<!-- like "dictionaries" that tell the computer what tags are -->
+<!-- allowed in this file and what they mean. -->
+<web-app
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+        http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+    id="WebAdder"
+    version="2.5">
+
+    <!-- ======================================================== -->
+    <!-- DISPLAY NAME                                              -->
+    <!-- This is a human-readable name for our web application.    -->
+    <!-- It shows up in the Tomcat manager and Eclipse IDE.        -->
+    <!-- It doesn't affect how the app works — it's just a label.  -->
+    <!-- ======================================================== -->
+    <display-name>WebAdder</display-name>
+
+    <!-- ======================================================== -->
+    <!-- WELCOME FILE LIST                                         -->
+    <!-- When someone visits our application's URL without         -->
+    <!-- specifying a specific page (like visiting http://localhost -->
+    <!-- :8080/WebAdder/), the server will look for these files    -->
+    <!-- in order and show the first one it finds.                 -->
+    <!-- Think of it like a "home page" — when you visit a website -->
+    <!-- without clicking on a specific link, you see the home page-->
+    <!-- ======================================================== -->
+    <welcome-file-list>
+
+        <!-- The server first looks for "index.html" -->
+        <welcome-file>index.html</welcome-file>
+
+        <!-- If index.html is not found, it looks for "index.htm" -->
+        <welcome-file>index.htm</welcome-file>
+
+        <!-- If neither is found, it looks for "index.jsp" -->
+        <!-- JSP = JavaServer Pages, a way to write dynamic web pages -->
+        <welcome-file>index.jsp</welcome-file>
+
+        <!-- Finally, it tries "default.html", "default.htm", -->
+        <!-- and "default.jsp" as last resorts -->
+        <welcome-file>default.html</welcome-file>
+        <welcome-file>default.htm</welcome-file>
+        <welcome-file>default.jsp</welcome-file>
+
+    </welcome-file-list>
+
+    <!-- ======================================================== -->
+    <!-- SERVLET CONFIGURATION (for the Web Service)               -->
+    <!--                                                           -->
+    <!-- WHAT IS A SERVLET?                                        -->
+    <!-- A Servlet is a Java program that runs on the server and   -->
+    <!-- handles incoming HTTP requests. Think of it as a "waiter" -->
+    <!-- in a restaurant — it takes orders (requests) from         -->
+    <!-- customers (clients) and brings back food (responses).     -->
+    <!--                                                           -->
+    <!-- WHY IS THIS HERE?                                         -->
+    <!-- When Eclipse creates a web service from our WebAdder      -->
+    <!-- class, it automatically adds a special servlet (called    -->
+    <!-- Apache Axis servlet) that knows how to handle SOAP        -->
+    <!-- messages. This servlet receives SOAP requests, calls our  -->
+    <!-- WebAdder.addition() method, and sends back SOAP responses.-->
+    <!-- ======================================================== -->
+
+    <!-- "servlet" block DEFINES a servlet (gives it a name and -->
+    <!-- tells which Java class to run) -->
+    <servlet>
+        <!-- A friendly name we give to this servlet -->
+        <!-- We can use any name, but "AxisServlet" is standard -->
+        <!-- for Apache Axis web services -->
+        <servlet-name>AxisServlet</servlet-name>
+
+        <!-- This is the actual Java class that will handle requests -->
+        <!-- Apache Axis is a library that processes SOAP messages -->
+        <!-- It's like a "translator" between SOAP XML and Java -->
+        <servlet-class>org.apache.axis.transport.http.AxisServlet</servlet-class>
+    </servlet>
+
+    <!-- "servlet-mapping" block tells the server WHICH URLs -->
+    <!-- should be handled by which servlet -->
+    <servlet-mapping>
+        <!-- This must match the <servlet-name> above -->
+        <servlet-name>AxisServlet</servlet-name>
+
+        <!-- "/services/*" means any URL starting with /services/ -->
+        <!-- will be handled by the AxisServlet -->
+        <!-- For example: http://localhost:8080/WebAdder/services/WebAdder -->
+        <!-- The "*" is a wildcard meaning "anything" -->
+        <url-pattern>/services/*</url-pattern>
+    </servlet-mapping>
+
+</web-app>
+
+<!-- ============================================================ -->
+<!-- SUMMARY:                                                      -->
+<!-- This web.xml file tells Tomcat:                               -->
+<!-- 1. Our app is called "WebAdder"                               -->
+<!-- 2. If someone visits the root URL, show index.html            -->
+<!-- 3. Any URL with "/services/" should be handled by Apache Axis -->
+<!--    which processes SOAP web service requests                  -->
+<!-- ============================================================ -->
