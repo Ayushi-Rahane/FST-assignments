@@ -1,0 +1,12 @@
+<students>
+<student id="101">
+ <name>Ayushi</name>
+ <age>20</age>
+ <dept>IT</dept>
+</student>
+<student id="102">
+ <name>Mohini</name>
+ <age>19</age>
+ <dept>COE</dept>
+</student>
+</students>
